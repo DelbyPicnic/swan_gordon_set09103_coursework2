@@ -1,0 +1,24 @@
+Advanced Web Technologies -  Coursework Two
+Simpler clone of boards.4chan.org
+
+Preface: 
+4chan is an imageboard featuing multiple forums that allow users to upload images, videos, and text when creating a thread or a post.
+The site uses some user authentication for admin work, but for general users there is no log-in functionality.
+
+4chan also supports user-bans by tracking ip addresses.
+
+
+Scope:
+- Multiple boards/topics
+- 30 threads per board at any one time.
+- 180 image posts per thread 
+- Unlimited text posts per thread.
+- Administration system, allowing admins to log in and out, with extra features for deleting threads an posts.
+- Simple settinggs page for admins only, allows for creation and deletion of boards, adjustment of post limits etc.
+- Image and video upload limits of 4MB
+
+Boundaries:
+- Custom user-settings
+- General user accounts
+- Tripcodes
+- User banning using IPs (Maybe if there's time but probably not)
