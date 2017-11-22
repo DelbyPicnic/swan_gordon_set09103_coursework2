@@ -1,0 +1,32 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<h2>Viewing Thread: {{ thread[0][0] }}</h2>
+		<h3>{{ thread[0][1] }}</h3>
+
+		{% for p in posts %}
+
+			<p>{{ p[0] }} : {{ p[2] }} </p>
+			{% if session.get('username', None) == p[4]: %}
+			<form action="{{ url_for('rm_post') }}" method="post" name="rmpost">
+				<input type="hidden" name="postID" value="{% print(p[0]) %}">
+				<input type="submit" name="submit">
+			</form>
+			{% endif %}
+
+		{% endfor %}
+
+		<h3>Make A Post:</h3>
+		<form action="{{ url_for('mk_post') }}" method="post" name="mkpost" enctype="multipart/form-data">
+			Image Link:<br>
+			<input type="text" name="img_link" id="img_link"/>
+			<br>
+			Comment:<br>
+			<input type="text" name="content" id="content"/>
+			<br>
+			<input type="hidden" name="threadID" value="{% print(thread[0][0]) %}" id="threadID">
+			<input type="submit" name="submit" id="submit"/>
+		</form>
+	</body>
+</html>

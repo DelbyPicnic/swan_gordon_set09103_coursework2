@@ -1,0 +1,49 @@
+<html>
+	<head>
+	</head>
+	<style>
+		table, th, td {
+		    border: 1px solid black;
+		}
+	</style>
+	<body>
+		<h3>Message Board!</h3>
+
+		<table>
+			<tr>
+				<th>Thread</th>
+				<th>Link</th>
+				<th>Controls</th>
+			</tr>
+
+			{% for t in threads %}
+			<tr>
+				<td>{{ t[1] }}</td>
+				<td><a href="/viewthread?id={% print(t[0]) %}">View Thread ></a></td>
+				<td>
+					{% if session.get('username', None) == t[4]: %}
+					<form action="{{ url_for('rm_thread') }}" method="post" name="rmpost">
+						<input type="hidden" name="threadID" value="{% print(t[0]) %}">
+						<input type="submit" name="submit">
+					</form>
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+		<h3>Make A Thread:</h3>
+		<form action="{{ url_for('mk_thread') }}" method="post" name="mkpost" enctype="multipart/form-data">
+			Image Link:<br>
+			<input type="text" name="img_link" id="img_link"/>
+			<br>
+			Title:<br>
+			<input type="text" name="title" id="content"/>
+			<br>
+			Comment:<br>
+			<input type="text" name="content" id="content"/>
+			<br>
+			<input type="submit" name="submit" id="submit"/>
+		</form>
+	</body>
+</html>
