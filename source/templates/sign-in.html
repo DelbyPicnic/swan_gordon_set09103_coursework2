@@ -29,6 +29,24 @@
 		</div>
 	</nav>
 
+	<div class="container">
+		<div class="jumbotron">
+
+			{% if session.get('username', None) != None: %}
+				<h2>You're already logged in!</h2>
+				<a href="{{ url_for('logout') }}" class="btn btn-outline-dark">Sign Out?</a>
+			{% else: %}
+				<form action="{{ url_for('login') }}" method="post" name="form">
+					<label for="username">Username:</label>
+					<input type="text" name="username" id="username"/>
+					<label for="password">Password:</label>
+					<input type="password" name="password" id="password"/> 
+					<input type="submit" name="submit" id="submit"/>
+				</form>
+			{% endif %}
+		</div>
+	</div>
+
 	
 
 	<!-- Optional JavaScript -->

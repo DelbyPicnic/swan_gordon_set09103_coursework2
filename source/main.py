@@ -124,19 +124,7 @@ def login():
 			return "Username or Password is incorrect"
 
 	else:
-		page = '''
-			<html>
-				<body>
-					<h3>Sign In!</h3>
-					<form action="" method="post" name="login" enctype="multipart/form-data">
-						<input type="text" name="username" id="username"/>
-						<input type="password" name="password" id="password"/>
-						<input type="submit" name="submit" id="submit"/>
-					</form>
-				</body
-			</html>
-		'''
-		return page
+		return render_template("sign-in.html")
 
 
 @app.route("/register", methods=['GET','POST'])
@@ -200,7 +188,7 @@ def logout():
 	# redirect to home
 
 	session.clear()
-	return "Sign Out Successful"
+	return redirect(url_for('root'))
 
 @app.route("/new_thread", methods=['POST'])
 def mk_thread():
