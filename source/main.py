@@ -255,7 +255,7 @@ def mk_post():
 					print("ERR: Could not make post due to missing paramiters")
 					return redirect(url_for("root"))
 				else:
-					if(len(request.form['content']) > 1200 or len(request.form['img_link']) > 120):
+					if(len(request.form['content']) > 1200):
 						print("ERR: Could not make post due to oversized paramiters")
 						return redirect(url_for("root"))
 					else:

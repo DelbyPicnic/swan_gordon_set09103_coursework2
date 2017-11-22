@@ -53,7 +53,7 @@
 
 	<div class="container-fluid">
 			<div class="card text-white bg-dark mb-3">
-				<div class="card-header">({{ thread[0][0] }}) | {{ thread[0][4] }}</div>
+				<div class="card-header">({{ thread[0][0] }}) | {{ thread[0][3] }}</div>
 				<div class="card-body">
 					<h4 class="card-title">{{ thread[0][1] }}</h4>
 					<p class="card-text">{{ thread[0][2] }}</p>
@@ -73,7 +73,6 @@
 					{% if session.get('username', None) == p[4] or session.get('status', None) > 0: %}
 					<button type="submit" class="btn btn-outline-danger">DELETE</button>
 					{% endif %}
-					<a class="btn btn-outline-dark" href="/viewthread?id={% print(p[0]) %}" role="button">View Thread > </a>
 				</form>
 			</div>
 		</div>

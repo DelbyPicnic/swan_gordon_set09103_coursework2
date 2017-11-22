@@ -1,0 +1,167 @@
+% #######################################
+% ########### FILL THESE IN #############
+% #######################################
+\def\mytitle{MSG - Online Message Forum}
+\def\mykeywords{forum, board, post, thread, text, image}
+\def\myauthor{Gordon Swan}
+\def\contact{40202556@live.napier.ac.uk}
+\def\mymodule{Advanced Web Technologies (SET09103)}
+% #######################################
+% #### YOU DON'T NEED TO TOUCH BELOW ####
+% #######################################
+\documentclass[10pt, a4paper]{article}
+\usepackage[a4paper,outer=1.5cm,inner=1.5cm,top=1.75cm,bottom=1.5cm]{geometry}
+\twocolumn
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+%colour our links, remove weird boxes
+\usepackage[colorlinks,linkcolor={black},citecolor={blue!80!black},urlcolor={blue!80!black}]{hyperref}
+%Stop indentation on new paragraphs
+\usepackage[parfill]{parskip}
+%% Arial-like font
+\usepackage{lmodern}
+\renewcommand*\familydefault{\sfdefault}
+%Napier logo top right
+\usepackage{watermark}
+%Lorem Ipusm dolor please don't leave any in you final report ;)
+\usepackage{lipsum}
+\usepackage{xcolor}
+\usepackage{listings}
+%give us the Capital H that we all know and love
+\usepackage{float}
+%tone down the line spacing after section titles
+\usepackage{titlesec}
+%Cool maths printing
+\usepackage{amsmath}
+%PseudoCode
+\usepackage{algorithm2e}
+
+\titlespacing{\subsection}{0pt}{\parskip}{-3pt}
+\titlespacing{\subsubsection}{0pt}{\parskip}{-\parskip}
+\titlespacing{\paragraph}{0pt}{\parskip}{\parskip}
+\newcommand{\figuremacro}[5]{
+    \begin{figure}[#1]
+        \centering
+        \includegraphics[width=#5\columnwidth]{#2}
+        \caption[#3]{\textbf{#3}#4}
+        \label{fig:#2}
+    \end{figure}
+}
+
+\lstset{
+	escapeinside={/*@}{@*/}, language=SQL,
+	basicstyle=\fontsize{8.5}{12}\selectfont,
+	numbers=left,numbersep=2pt,xleftmargin=2pt,frame=tb,
+    columns=fullflexible,showstringspaces=false,tabsize=4,
+    keepspaces=true,showtabs=false,showspaces=false,
+    backgroundcolor=\color{white}, morekeywords={inline,public,
+    class,private,protected,struct},captionpos=t,lineskip=-0.4em,
+	aboveskip=10pt, extendedchars=true, breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+
+\thiswatermark{\centering \put(336.5,-38.0){\includegraphics[scale=0.8]{logo}} }
+\title{\mytitle}
+\author{\myauthor\hspace{1em}\\\contact\\Edinburgh Napier University\hspace{0.5em}-\hspace{0.5em}\mymodule}
+\date{}
+\hypersetup{pdfauthor=\myauthor,pdftitle=\mytitle,pdfkeywords=\mykeywords}
+\sloppy
+% #######################################
+% ########### START FROM HERE ###########
+% #######################################
+\begin{document}
+	\maketitle
+	\begin{abstract}
+    One of the most important uses for the internet has been communication, from the early days of using Internet Relay Chat for text-based messaging to modern social media giants such as Facebook and YouTube, sharing high definition multimedia content with large numbers of people at once, the method of sharing and communicating information with others has always been a keen interest when developing for the web. One such method of sharing information is the forum, a virtual public notice board, mostly suited to question and answer style situations, such as tech support. Internet forums are extremely popular even today, with Stack Exchange\cite{StackExchange} being one of the largest internet forum networks in existence.
+	\end{abstract}
+    
+	\textbf{Keywords -- }{\mykeywords}
+
+	\section{Design}
+	\paragraph{Database Design}
+	In order for MSG to store any information long term, it requires access to a database. Python has an SQLite Module, which can be used to read and write database files very efficiently. This method of data storage is far superior than using JSON or text file based storage solutions as SQLite is far more efficient and much faster. The database itself consist of three tables, one for the threads, one for the comments on the threads, and one for the user accounts. The tables are also linked together using foreign keys, this helps to associate posts with threads, and then with the owning user accounts. This is especially useful if content needs to be erased from the database as all linked content can also be removed to reduce fragmentation.
+	The Database Schema can be seen in Listing 1.
+	
+	\begin{lstlisting}[caption = SQLite Database Schema]
+	    CREATE TABLE IF NOT EXISTS thread (
+        	thread_id integer PRIMARY KEY AUTOINCREMENT,
+        	thread_title text,
+        	thread_content text,
+        	thread_img text,
+        	thread_owner varchar,
+        	thread_active boolean DEFAULT TRUE,
+        	thread_time integer
+        );
+        
+        CREATE TABLE IF NOT EXISTS post (
+        	post_id integer PRIMARY KEY AUTOINCREMENT,
+        	post_thread integer,
+        	post_content text,
+        	post_img text,
+        	post_owner integer,
+        	post_active boolean DEFAULT TRUE,
+        	post_time integer,
+        
+        	FOREIGN KEY (post_thread) REFERENCES thread (thread_id)
+        	FOREIGN KEY (post_owner) REFERENCES user (user_id)
+        );
+        
+        CREATE TABLE IF NOT EXISTS user (
+        	user_id integer PRIMARY KEY AUTOINCREMENT,
+        	user_level integer DEFAULT 0,
+        	user_name varchar,
+        	user_email varchar UNIQUE,
+        	user_password varchar,
+        	user_active boolean DEFAULT TRUE
+        );
+	\end{lstlisting}
+	
+	\paragraph{UI Design}
+	The User Interface has been designed to conserve space by using modals for the 'New Thread' and 'New Post'  forms. This design choice means that more of the screen space can be dedicated to the forum content, instead of data fields that aren't necessarily being used all the time. This is especially important if the user is on a mobile platform, where screen space is often very limited. In addition to saving screen space, modals provide a modern, responsive feel to the site's performance, while still performing well on low power devices. The responsive nature of the site, as well as the modal functionality is all thanks to the Bootstrap Framework\cite{bootstrap} providing the majority of the user interface components for the site.
+	
+	\figuremacro{h}{modal}{- Modals}{ - Modals used to hold forms}{1.0}
+	
+	\section{Enhancements}
+	\paragraph{Multiple Boards}
+	One particular area where MSG is lacking functionality is with multiple board support. Most, if not all modern forum sites allow for multiple boards covering different topics. This is most definitely a missing feature from MSG, however with some tweaking could be implemented. For instance the database schema could be improved to feature an additional table which hosted different board topics, and boards could be linked to this table via foreign key.
+	\paragraph{Multimedia Support}
+	In some message boards, it is possible for the user to upload multimedia elements, such as images and videos. A possible future feature of MSG could be multimedia support, for hosting short videos, and images for the duration of the thread's lifetime. One considerable challenge with this feature would be maintaining security, as all content being uploaded to a server by a user should be considered malicious until tested and evaluated to be otherwise. Therefore, creating sanitation software that ensures security of the site is maintained would be of some difficulty.
+	\section{Critical Evaluation}
+	\paragraph{Security}
+	With so many websites now storing information about their users, it's important for these websites to employ some level of security and encryption to reduce the impact of data breaches and leaks, and to prevent unauthorized access to sensitive data in the first place. MSG makes use of password hashing to keep user passwords secure, even if the database file is compromised by a malicious entity. This is because password hashing compares hashed keys rather than plain text passwords, avoiding the need to ever store or compare actual passwords at all.\newline
+	In addition to password hashing, MSG also uses tag stripping to remove any HTML or SQL code from user-entered content. This reduces the risk of SQL Injection attacks and Cross-Site scripting as it is much harder for a malicious user to execute code snippets on the site without authorization. Without tag stripping, a user may be able to insert PHP/Jinja2/SQL source code into a field which would be displayed as post or thread content, and have that code executed when the page - now containing malicious code - is rendered by the app.
+	Listing 2 shows the tag stripping method, adapted from Stack Overflow (Another popular internet forum part of Stack Exchange)\cite{StripTags}
+	\begin{lstlisting}[caption = Python HTML Strip Tags]
+	class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+    def strip_tags(html):
+        s = MLStripper()
+        s.feed(html)
+        return s.get_data()
+	\end{lstlisting}
+	
+	\paragraph{Administrative Tools}
+	All internet forums, which operate around a public based community, require some level of administration and moderation to combat abuse and misuse. MSG has some features for allowing elevated users to control content such as moderator status, which permits trusted users to delete content that they believe to be inappropriate. These features are however, lacking as there is currently no functioning ban list for keeping undesirable users out of the site. The only step in this direction is user account control, in which accounts can be deactivated, but there is not yet any restriction on creating new or multiple accounts. 
+	\section{Personal Evaluation}
+	\paragraph{Database Initialization}
+	One particular challenge has been understanding and learning to use the database schema system, which allows for a database to be initialized from a script before being used with the web application. This is extremely useful as it allows the web application to be shipped or deployed on a different system, without having to also transfer or copy large database files.
+	It also means that the database can be dropped and re-established easily, without needing to manually construct the database via numerous commands when a new database file needs to be created.
+	\paragraph{Validation}
+	Another challenging concept has been ensuring that all user input is validated correctly, to ensure that users cannot exploit the site and perform operations that they should not be allowed to do such as delete content without the correct level of authorization. As mentioned previously, all user input is stripped of tags to ensure the risk of CSS and Injection attacks are reduced as much as possible. In addition to this, session data should be checked at all times to ensure that a user has the correct permissions to create or delete content on the server, otherwise a user may be able to cause grief for other users by hijacking their threads or deleting their posts.
+    \section{Conclusion}
+    To conclude, MSG effectively makes use of the flask framework and it's extended features to provide a robust and secure public forum. With a simple, yet effective database, and security-focused application structure, MSG effectively achieves it's goal of providing an internet forum web application. There are numerous features which, with more time could make this application far more functional, and arguably more useful compared to other internet forums, however as a simple question and answer system it meets the requirements
+    
+\bibliographystyle{ieeetr}
+\bibliography{references}
+		
+\end{document}
