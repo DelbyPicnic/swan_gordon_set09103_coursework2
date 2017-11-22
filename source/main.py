@@ -67,6 +67,10 @@ def root():
 
 	return render_template("dashboard.html", threads=data)
 
+@app.route("/account")
+def account():
+	return render_template("account.html")
+
 @app.route("/viewthread", methods=['GET','POST'])
 def view_thread():
 	# If no paramiter is sent, redirect to root
@@ -187,14 +191,9 @@ def mk_thread():
 					else:
 						db = get_db()
 						cur = db.cursor()
-						if request.form['img_link'] == "":
-							cur.execute("INSERT INTO thread (thread_title, thread_content, thread_owner, thread_time) VALUES (?,?,?,strftime('%s','now'))", \
-								(strip_tags(request.form['title']), strip_tags(request.form['content']), session['username'],))
-							db.commit()
-						else:
-							cur.execute("INSERT INTO thread (thread_title, thread_content, thread_img, thread_owner, thread_time) VALUES (?,?,?,?,strftime('%s','now'))", \
-								(strip_tags(request.form['title']), strip_tags(request.form['content']), strip_tags(request.form['img_link']), session['username'],))
-							db.commit()
+						cur.execute("INSERT INTO thread (thread_title, thread_content, thread_owner, thread_time) VALUES (?,?,?,strftime('%s','now'))", \
+							(strip_tags(request.form['title']), strip_tags(request.form['content']), session['username'],))
+						db.commit()
 						print("Thread created successfully")
 						return redirect(url_for('root'))
 
@@ -272,14 +271,10 @@ def mk_post():
 							print("Could not add post as the thread is no longer active")
 							return redirect(url_for('root'))
 
-						if request.form['img_link'] == "":
-							cur.execute("INSERT INTO post (post_thread, post_content, post_owner, post_time) VALUES (?,?,?,strftime('%s','now'))", \
-								(request.form['threadID'], strip_tags(request.form['content']), session['username'],))
-							db.commit()
-						else:
-							cur.execute("INSERT INTO post (post_thread, post_content, post_img, post_owner, post_time) VALUES (?,?,?,?,strftime('%s','now'))", \
-								(strip_tags(request.form['title']), strip_tags(request.form['content']), strip_tags(request.form['img_link']), session['username'],))
-							db.commit()
+						cur.execute("INSERT INTO post (post_thread, post_content, post_owner, post_time) VALUES (?,?,?,strftime('%s','now'))", \
+							(request.form['threadID'], strip_tags(request.form['content']), session['username'],))
+						db.commit()
+						
 						print("Post created successfully")
 						return redirect(url_for('root'))
 

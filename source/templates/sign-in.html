@@ -20,11 +20,20 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="#">Dashboard<span class="sr-only">(link)</span></a>
+					<a class="nav-link" href="{{ url_for('root') }}">Dashboard<span class="sr-only">(link)</span></a>
+				</li>
+				{% if session.get('username', None) != None: %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('account') }}">Account<span class="sr-only">(link)</span></a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Account<span class="sr-only">(link)</span></a>
+					<a class="nav-link" href="{{ url_for('logout') }}">Sign Out<span class="sr-only">(link)</span></a>
 				</li>
+				{% else: %}
+				<li class="nav-item active">
+					<a class="nav-link" href="{{ url_for('login') }}">Sign In/Register<span class="sr-only">(link)</span></a>
+				</li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
@@ -47,6 +56,8 @@
 					<input type="password" name="password" id="password"/>
 					<br><br>
 					<button type="submit" class="btn btn-outline-dark" name="submit" id="submit">Sign In</button>
+					<br>
+					<a href="{{ url_for('register') }}">Need an account?</a>
 				</form>
 			{% endif %}
 		</div>

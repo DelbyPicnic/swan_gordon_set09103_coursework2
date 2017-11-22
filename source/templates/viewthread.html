@@ -22,9 +22,18 @@
 				<li class="nav-item">
 					<a class="nav-link" href="{{ url_for('root') }}">Dashboard<span class="sr-only">(link)</span></a>
 				</li>
+				{% if session.get('username', None) != None: %}
 				<li class="nav-item">
-					<a class="nav-link" href="#">Account<span class="sr-only">(link)</span></a>
+					<a class="nav-link" href="{{ url_for('account') }}">Account<span class="sr-only">(link)</span></a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('logout') }}">Sign Out<span class="sr-only">(link)</span></a>
+				</li>
+				{% else: %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('login') }}">Sign In/Register<span class="sr-only">(link)</span></a>
+				</li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
@@ -53,7 +62,7 @@
 
 		{% for p in posts %}
 		<div class="card border-dark mb-3">
-			<div class="card-header">({{ p[0] }}) | {{ p[4] }}:</div>
+			<div class="card-header">({{ p[0] }}) | {{ p[3] }}:</div>
 			<div class="card-body text-dark">
 				<p>{{p[2]}}</p>
 			</div>
@@ -82,11 +91,6 @@
 				</div>
 				<form action="{{ url_for('mk_post') }}" method="post" id="mkpost" enctype="multipart/form-data">
 					<div class="modal-body">
-
-					<div class="form-group">
-						<label for="img_link">Thread Image (URL):</label>
-						<input type="text" class="form-control" name="img_link" id="img_link" placeholder="Image URL (Optional)">
-					</div>
 
 					<div class="form-group">
 						<label for="content">Comment:</label>

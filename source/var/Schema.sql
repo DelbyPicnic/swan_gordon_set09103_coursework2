@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS thread (
 	thread_id integer PRIMARY KEY AUTOINCREMENT,
 	thread_title text,
 	thread_content text,
-	thread_img text,
 	thread_owner varchar,
 	thread_active boolean DEFAULT TRUE,
 	thread_time integer
@@ -12,7 +11,6 @@ CREATE TABLE IF NOT EXISTS post (
 	post_id integer PRIMARY KEY AUTOINCREMENT,
 	post_thread integer,
 	post_content text,
-	post_img text,
 	post_owner integer,
 	post_active boolean DEFAULT TRUE,
 	post_time integer,

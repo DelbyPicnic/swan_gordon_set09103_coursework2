@@ -12,7 +12,7 @@ except:
 	sys.exit()
 
 
-sql = "SELECT * FROM thread"
+sql = "SELECT user_level FROM user"
 
 cur.execute(sql)
 ddata = cur.fetchall()

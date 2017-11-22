@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>MSG | Sign In</title>
+	<title>MSG | Dash</title>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,14 +23,14 @@
 					<a class="nav-link" href="{{ url_for('root') }}">Dashboard<span class="sr-only">(link)</span></a>
 				</li>
 				{% if session.get('username', None) != None: %}
-				<li class="nav-item">
+				<li class="nav-item active">
 					<a class="nav-link" href="{{ url_for('account') }}">Account<span class="sr-only">(link)</span></a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{{ url_for('logout') }}">Sign Out<span class="sr-only">(link)</span></a>
 				</li>
 				{% else: %}
-				<li class="nav-item active">
+				<li class="nav-item">
 					<a class="nav-link" href="{{ url_for('login') }}">Sign In/Register<span class="sr-only">(link)</span></a>
 				</li>
 				{% endif %}
@@ -38,37 +38,31 @@
 		</div>
 	</nav>
 
-	<div class="container">
-		<div class="jumbotron text-center">
-
-			{% if session.get('username', None) != None: %}
-				<h2>You're already logged in!</h2>
-				<a href="{{ url_for('root') }}" class="btn btn-outline-dark">View Your Account?</a>
-			{% else: %}
-				<h3> Create New Account:</h3>
-				<form action="" method="post" name="register" enctype="multipart/form-data">
-						Username:<br>
-						<input type="text" name="username" id="username"/>
-						<br>
-						Email:<br>
-						<input type="email" name="email" id="email"/>
-						<br>
-						Password:<br>
-						<input type="password" name="password" id="password"/>
-						<br>
-						Repeat:<br>
-						<input type="password" name="password2" id="password2"/>
-						<br><br>
-						<button type="submit" class="btn btn-outline-dark" name="submit" id="submit">Create My Account</button>
-						<br>
-						<a href="{{ url_for('login') }}">Already have an account?</a>
-					</form>
-			{% endif %}
+	<div class="contaner text-center">
+		{% if session.get('username', None) == None: %}
+		<div class="card">
+			<div class="card-body">
+				<h3>You aren't signed in :/</h3>
+			</div>
 		</div>
+		{% else: %}
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Your Account:</h4>
+				<h6 class="card-subtitle mb-2 text-muted">Here's all the info we know about you!</h6>
+
+				<h3>Username: {{ session.get('username', None) }}</h3>
+				<h3>Email: {{ session.get('email', None) }}</h3>
+				{% if session.get('status', None) > 0: %}
+				<h3>You have administrative powers</h3>
+				{% endif %}
+				
+				<a href="{{ url_for('logout') }}" class="card-link">Sign Out?</a>
+			</div>
+		</div>
+		{% endif %}
 	</div>
-
 	
-
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

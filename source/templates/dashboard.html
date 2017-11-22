@@ -20,11 +20,20 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item active">
-					<a class="nav-link" href="#">Dashboard<span class="sr-only">(current)</span></a>
+					<a class="nav-link" href="{{ url_for('root') }}">Dashboard<span class="sr-only">(link)</span></a>
+				</li>
+				{% if session.get('username', None) != None: %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('account') }}">Account<span class="sr-only">(link)</span></a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Account<span class="sr-only">(link)</span></a>
+					<a class="nav-link" href="{{ url_for('logout') }}">Sign Out<span class="sr-only">(link)</span></a>
 				</li>
+				{% else: %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('login') }}">Sign In/Register<span class="sr-only">(link)</span></a>
+				</li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
@@ -32,8 +41,8 @@
 	<div class="container text-center page-controls">
 		{% if session.get('username', None) == None: %}
 		<h4>Sign-in/Register to make threads!</h4>
-		<a class="btn btn-outline-info" href="/sign-in" role="button">Sign In > </a>
-		<a class="btn btn-outline-info" href="/register" role="button">Register > </a>
+		<a class="btn btn-outline-dark" href="/sign-in" role="button">Sign In > </a>
+		<a class="btn btn-outline-dark" href="/register" role="button">Register > </a>
 		{% else %}
 		<button type="button" class="btn btn-lg btn-outline-dark" data-toggle="modal" data-target="#makeThread">
 			Make a Thread
@@ -45,7 +54,7 @@
 	<div class="container-fluid">
 		{% for t in threads %}
 		<div class="card border-dark mb-3">
-			<div class="card-header">({{ t[0] }}) | {{ t[4] }}:</div>
+			<div class="card-header">({{ t[0] }}) | {{ t[3] }}:</div>
 			<div class="card-body text-dark">
 				<h4 class="card-title text-dark">{{ t[1] }}</h4>
 				<p>{{t[2]}}</p>
@@ -79,11 +88,6 @@
 					<div class="form-group">
 						<label for="title">Thread Title:</label>
 						<input type="text" class="form-control" name="title" id="title" placeholder="Title">
-					</div>
-
-					<div class="form-group">
-						<label for="img_link">Thread Image (URL):</label>
-						<input type="text" class="form-control" name="img_link" id="img_link" placeholder="Image URL (Optional)">
 					</div>
 
 					<div class="form-group">
