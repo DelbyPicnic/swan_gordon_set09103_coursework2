@@ -157,29 +157,7 @@ def register():
 			return redirect(url_for("login"))
 
 	else:
-		page = '''
-			<html>
-				<body>
-					<h3>Register!</h3>
-					<form action="" method="post" name="register" enctype="multipart/form-data">
-						Username:<br>
-						<input type="text" name="username" id="username"/>
-						<br>
-						Email:<br>
-						<input type="email" name="email" id="email"/>
-						<br>
-						Password:<br>
-						<input type="password" name="password" id="password"/>
-						<br>
-						Repeat:<br>
-						<input type="password" name="password2" id="password2"/>
-						<br>
-						<input type="submit" name="submit" id="submit"/>
-					</form>
-				</body
-			</html>
-		'''
-		return page
+		return render_template("register.html")
 
 
 @app.route("/sign-out")
